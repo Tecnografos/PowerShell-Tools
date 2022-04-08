@@ -81,23 +81,23 @@ function Get-LastLogonUsers {
             $msg = "Inicio de sesión"
             $usr = $log.Properties[5].Value
             $type = $log.Properties[8].Value
+
+            switch ($type) {
+                2 { $typeMsg = "Interactivo" }
+                3 { $typeMsg = "Red" }
+                4 { $typeMsg = "Lote" }
+                5 { $typeMsg = "Servicio" }
+                7 { $typeMsg = "Desbloquear" }
+                8 { $typeMsg = "NetworkCleartext" }
+                9 { $typeMsg = "NewCredentials" }
+                10 { $typeMsg = "RemoteInteractive" }
+                11 { $typeMsg = "CachedInteractive" }
+                Default { $typeMsg = "-" }
+            }
         }
     
         #(($usr -ne "") -and ($usr -ne "SYSTEM")) You can add (or not) filters at this point
         if (($usr -ne "")) {
-
-            switch ($type) {
-                2 { $typeMsg = "Interactivo"  }
-                3 { $typeMsg = "Red" }
-                4 { $typeMsg = "Lote" }
-                5 { $typeMsg = "Servicio" }
-                7 {$typeMsg = "Desbloquear" }
-                8 {$typeMsg = "NetworkCleartext"  }
-                9 { $typeMsg = "NewCredentials" }
-                10 {$typeMsg = "RemoteInteractive"  }
-                11 { $typeMsg = "CachedInteractive" }
-                Default {$typeMsg = "-"}
-            }
             $results += New-Object PSObject -Property @{ "Usuario" = $usr; "Fecha" = $log.TimeCreated; "Evento" = $msg; "Tipo" = $typeMsg };
         }
     
