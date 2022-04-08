@@ -107,7 +107,7 @@ function Get-LastLogonUsers {
         Write-Host "No hay eventos que mostrar. Prueba aumentando el límite de eventos a analizar." -ForegroundColor Red
     }
     else {
-        $results
+        $results | Select-Object "Usuario", "Evento", "Tipo", "Fecha"
     }
 }
 
