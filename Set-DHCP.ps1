@@ -27,10 +27,9 @@
 #>
 
 $Protocolo = 'IPv4'
-$TarjetaRed_ID = ((Get-NetAdapter | Where-Object Status -eq 'up') | Get-NetIPInterface -Addressfamily $Protocolo).ifIndex
 
-Get-NetIPAddress -InterfaceIndex $TarjetaRed_ID -AddressFamily $Protocolo
+((Get-NetAdapter | Where-Object Status -eq 'up') | Get-NetIPInterface -Addressfamily $Protocolo) | Select-Object ifIndex, InterfaceAlias | Format-Table -Property *
 
-Set-NetIPInterface -InterfaceIndex $TarjetaRed_ID -DHCP Enabled
+$interfaceIndex = Read-Host "Introduce el InterfaceIndex de la tarjeta que quieres cambiar la IP: "
 
-Get-NetIPAddress -InterfaceIndex $TarjetaRed_ID -AddressFamily $Protocolo
+Set-NetIPInterface -InterfaceIndex $interfaceIndex -DHCP Enabled

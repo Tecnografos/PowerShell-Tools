@@ -25,21 +25,38 @@
   Purpose/Change: Version inicial
 
 #>
+$ErrorActionPreference = "Stop"
+$Host.UI.RawUI.WindowTitle = "Set-IP"
 
-Get-NetAdapter | Select-Object InterfaceAlias, InterfaceIndex
-Get-NetIPAddress -InterfaceIndex <número de la tarjeta> -AddressFamily "IPv4"
-Get-DnsClientServerAddress -InterfaceIndex <número de la tarjeta>
+$startDate = Get-Date
+
+Write-Host "
+
+HERRAMIENTA DE CAMBIO DE IP
+_________________________________________________________"
+
+Write-Host "`nFecha ejecución: $startDate"
+
+Get-NetAdapter | Select-Object InterfaceAlias, InterfaceIndex | Format-Table -Property *
+$interfaceIndex = Read-Host "Introduce el InterfaceIndex de la tarjeta que quieres cambiar la IP: "
+$netAdapter = Get-NetAdapter -InterfaceIndex $interfaceIndex | Select-Object InterfaceAlias -ErrorAction Stop
+$netIPAddress = Get-NetIPAddress -InterfaceIndex $interfaceIndex -AddressFamily "IPv4"
+#$dnsClientServerAddress = Get-DnsClientServerAddress -InterfaceIndex  $interfaceIndex 
+$oldGW = Get-NetIPConfiguration -ifIndex $interfaceIndex | ForEach-Object IPv4DefaultGateway
+
+$ip = Read-Host "Introduce la nueva IP: "
+$netMask = Read-Host "Introduce la máscara de red: "
+$gw = Read-Host "Introduce la puerta de enlace: "
 
 $IPConf = @{
-    InterfaceAlias = 'Wi-Fi'
-    PrefixLength   = 24               #255.255.255.0
-    IPAddress      = '192.168.1.67'
-    DefaultGateway = '192.168.1.1'
+    InterfaceAlias = $netAdapter.InterfaceAlias
+    PrefixLength   = $netMask
+    IPAddress      = $ip
+    DefaultGateway = $gw
    }
+
 New-NetIPAddress @IPConf
-
-Remove-NetIPAddress -IPAddress 192.168.1.67 -DefaultGateway 192.168.1.1
-
-Set-DnsClientServerAddress -InterfaceIndex 4 -ServerAddresses ("8.8.8.8","1.1.1.1")
-
+Remove-NetIPAddress -IPAddress $netIPAddress.IPAddress -DefaultGateway $oldGW.NextHop
+Set-DnsClientServerAddress -InterfaceIndex $interfaceIndex -ServerAddresses ("8.8.8.8","1.1.1.1")
+Write-Host "Prueba de conectividad..."
 Test-Connection google.es
