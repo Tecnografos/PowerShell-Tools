@@ -24,7 +24,11 @@ $TestFile = "C:\temp\pass.txt"
 $TestUser = "TestUser"
 $TestComputer = "TestComputer"
 
-#EJEMPLO 1: Guardar, leer y desencriptar la contraseña en un archivo de texto
+#EJEMPLO 1: Leer un string por teclado y convertirlo en seguro
+
+    $Pass = Read-Host -AsSecureString "Introduce la contraseña" | ConvertFrom-SecureString 
+
+#EJEMPLO 2: Guardar, leer y desencriptar la contraseña en un archivo de texto
 
     #Crear un string seguro y leerlo
     #NOTA: el usuario que ejectute el script tiene que ser el mismo que ejecute este comando, si no da error
@@ -36,7 +40,7 @@ $TestComputer = "TestComputer"
     #Para desencriptar un securestring
     [System.Net.NetworkCredential]::new("", $Pass).Password
 
-#EJEMPLO 2: Guardar en memoria y desencriptar la contraseña desde código
+#EJEMPLO 3: Guardar en memoria y desencriptar la contraseña desde código
 
     #Tener en una variable dentro del código
     #NOTA: ¡Es inseguro! porque va escrita en texto plano dentro del código.
@@ -45,7 +49,7 @@ $TestComputer = "TestComputer"
     #Para desencriptar un securestring
     [System.Net.NetworkCredential]::new("", $Pass).Password
 
-#EJEMPLO 3: Establecer una sesión con la contraseña y el usuario
+#EJEMPLO 4: Establecer una sesión con la contraseña y el usuario
 
     #Crear un objeto con las credenciales para establecer una sesión con otro host posteriormente
     $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $TestUser, $Pass
