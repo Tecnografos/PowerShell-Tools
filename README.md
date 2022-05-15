@@ -18,3 +18,5 @@ Si tienes alguna duda puedes ponerte en contacto conmigo mediante este enlace: h
 > **Set-IP.ps1:** Configura una IP fija a una máquina.  
 
 > **Set-DHCP.ps1:** Configura DHCP a una máquina que tiene una IP fija.
+
+> **SecureString.ps1:** Gestion básica de contraseñas con SecureString
