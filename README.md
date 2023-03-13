@@ -20,3 +20,5 @@ Si tienes alguna duda puedes ponerte en contacto conmigo mediante este enlace: h
 > **Set-DHCP.ps1:** Configura DHCP a una máquina que tiene una IP fija.
 
 > **SecureString.ps1:** Gestion básica de contraseñas con SecureString
+
+> **UpdateAllExcept.ps1:** Actualiza todo el software de tu equipo excepto los paquetes que le indiques en la variable $skipUpdate (adaptación al español de https://github.com/alkampfergit/personal-blog/discussions/11)
